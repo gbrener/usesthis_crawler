@@ -38,22 +38,15 @@ class UsesthisSpider(scrapy.Spider):
         # Load PersonItem
         person_loader = ItemLoader(item=PersonItem(), response=response)
         person_loader.default_output_processor = take_first
-        person_loader.add_css('name', 'h3.p-name::text',
-                              strip_all)
+        person_loader.add_css('name', 'h3.p-name::text', strip_all)
         person_loader.add_value('article_url', response.url)
         person_loader.add_css('pub_date', 'time.dt-published::attr(datetime)')
-        person_loader.add_css('title', 'p.summary.p-summary::text',
-                              strip_all)
-        person_loader.add_css('img_src', 'img.portrait::attr(src)',
-                              prepend_url)
-        person_loader.add_xpath('bio', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=1]/descendant-or-self::*/text()',
-                                join_all, add_space_after_punct)
-        person_loader.add_xpath('hardware', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=2]/descendant-or-self::*/text()',
-                                join_all, add_space_after_punct)
-        person_loader.add_xpath('software', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=3]/descendant-or-self::*/text()',
-                                join_all, add_space_after_punct)
-        person_loader.add_xpath('dream', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=4]/descendant-or-self::*/text()',
-                                join_all, add_space_after_punct)
+        person_loader.add_css('title', 'p.summary.p-summary::text', strip_all)
+        person_loader.add_css('img_src', 'img.portrait::attr(src)', prepend_url)
+        person_loader.add_xpath('bio', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=1]/descendant-or-self::*/text()', join_all, add_space_after_punct)
+        person_loader.add_xpath('hardware', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=2]/descendant-or-self::*/text()', join_all, add_space_after_punct)
+        person_loader.add_xpath('software', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=3]/descendant-or-self::*/text()', join_all, add_space_after_punct)
+        person_loader.add_xpath('dream', '//div[@class="e-content"]/p[count(preceding-sibling::h4)=4]/descendant-or-self::*/text()', join_all, add_space_after_punct)
         person_item = person_loader.load_item()
 
         # @gbrener 8/16/2015: The following line causes a NotImplementedError
@@ -65,8 +58,7 @@ class UsesthisSpider(scrapy.Spider):
         for tool_selector in response.css('div.e-content p a'):
             tool_loader = ItemLoader(item=ToolItem(), selector=tool_selector, response=response)
             tool_loader.default_output_processor = take_first
-            tool_loader.add_xpath('tool_name', './descendant-or-self::*/text()',
-                                  join_all, strip_one)
+            tool_loader.add_xpath('tool_name', './descendant-or-self::*/text()', join_all, strip_one)
             tool_loader.add_xpath('tool_url', './@href')
             tool_item = tool_loader.load_item()
 

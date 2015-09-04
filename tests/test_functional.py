@@ -59,9 +59,7 @@ class FunctionalTestCase(unittest.TestCase):
         self.assertEquals(same_n_relations, n_relations)
 
     def test_end_to_end_twice_fills_in_missing_person(self):
-        """Run the app in test-mode twice.
-        Between runs, remove a person from the database.
-        After the second run, verify that the database is full again.
+        """Run the app in test-mode twice. Between runs, remove a person from the database. After the second run, verify that the database is full again.
         """
         # Run 1
         subprocess.call('crawl-usesthis -t -d app_test.db', shell=True)
@@ -72,19 +70,23 @@ class FunctionalTestCase(unittest.TestCase):
         n_people = cur.execute('select count(*) from people').fetchone()[0]
         n_tools = cur.execute('select count(*) from tools').fetchone()[0]
         n_relations = cur.execute('select count(*) from people_to_tools').fetchone()[0]
-        con.close()
-
         self.assertGreater(n_people, 1)
         self.assertGreater(n_tools, 1)
         self.assertEquals(n_relations, n_tools)
 
         # Remove a person and their relevant items
-        con = sqlite3.connect('app_test.db')
-        cur = con.cursor()
         cur.execute('delete from tools where id = (select tool_id from people_to_tools where person_id = 1)')
         cur.execute('delete from people where id = 1')
         cur.execute('delete from people_to_tools where person_id = 1')
+        n_people_rm = cur.execute('select count(*) from people').fetchone()[0]
+        n_tools_rm = cur.execute('select count(*) from tools').fetchone()[0]
+        n_relations_rm = cur.execute('select count(*) from people_to_tools').fetchone()[0]
         con.close()
+
+        # Check that the removal worked
+        self.assertEquals(n_people_rm, n_people-1)
+        self.assertLess(n_tools_rm, n_tools)
+        self.assertLess(n_relations_rm, n_relations)
 
         # Run 2
         subprocess.call('crawl-usesthis -t -d app_test.db', shell=True)
@@ -97,6 +99,7 @@ class FunctionalTestCase(unittest.TestCase):
         more_n_relations = cur.execute('select count(*) from people_to_tools').fetchone()[0]
         con.close()
 
-        self.assertGreater(more_n_people, n_people)
-        self.assertGreaterEqual(more_n_tools, n_tools)
-        self.assertGreaterEqual(more_n_relations, n_relations)
+        # Check that the database is back to normal
+        self.assertEqual(more_n_people, n_people)
+        self.assertEqual(more_n_tools, n_tools)
+        self.assertEqual(more_n_relations, n_relations)
