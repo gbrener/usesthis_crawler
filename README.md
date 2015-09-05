@@ -8,7 +8,7 @@ To install:
 
     python setup.py install
 
-*Conda users* should also do the following:
+*Conda users* should also do the following ([here's why](https://cryptography.io/en/latest/installation/#building-cryptography-with-conda)):
 
     pip uninstall cryptography
     export DYLD_LIBRARY_PATH="$HOME/anaconda/lib" # aka LD_LIBRARY_PATH on Linux
