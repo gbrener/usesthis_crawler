@@ -6,25 +6,20 @@ import re
 from usesthis_crawler.items import PersonItem, ToolItem
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import Join, TakeFirst, Identity
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 
 
-class UsesthisSpider(scrapy.Spider):
+class UsesthisSpider(CrawlSpider):
     """
     Starting at http://usesthis.com/interviews, parse each interview article
     into a PersonItem (each containing a list of ToolsItems).
     If possible, navigate the "next" link and repeat the process.
     """
-    def parse(self, response):
-        article_links = response.css('article.interviewee.h-card.vcard a.p-name::attr(href)')
-        for article_link in article_links.extract():
-            article_url = urlparse.urljoin(response.url, article_link)
-            yield scrapy.Request(article_url, callback=self.parse_article)
-
-        next_link = response.css('a#next::attr(href)').extract_first()
-        if next_link is not None:
-            next_url = urlparse.urljoin(response.url, next_link)
-            yield scrapy.Request(next_url)
-
+    rules = (
+        Rule(LinkExtractor(restrict_css='article.interviewee.h-card.vcard a.p-name'), callback='parse_article'),
+        Rule(LinkExtractor(restrict_css='a#next')),
+    )
 
     def parse_article(self, response):
         # Initialize some I/O processors
