@@ -1,6 +1,8 @@
 # usesthis_crawler
 
-This is a crawler that scrapes usesthis.com/interviews and stores the results in a local database. The scraped information includes parts of the transcript, details about the person being interviewed, and the tools they use to do their jobs.
+This is a crawler that scrapes usesthis.com/interviews and stores the results in a local database. The scraped information includes parts of the transcript, details about the person being interviewed, and the tools they use to do their jobs
+
+**Note: Python 2.7 recommended. Not compatible with Python 3.**
 
 To install:
 
