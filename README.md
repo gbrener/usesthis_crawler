@@ -1,5 +1,7 @@
 # usesthis_crawler
 
+A scraper that crawls usesthis.com/interviews and stores the results in a local database. The database contains information about each interview, including the interview transcript, details about the person being interviewed, and the tools they use to do their jobs.
+
 To install:
 
     python setup.py install
@@ -21,6 +23,6 @@ For help:
     crawl-usesthis -h
 
 
-To develop:
+To test:
 
     python setup.py nosetests
