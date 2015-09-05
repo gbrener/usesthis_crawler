@@ -1,6 +1,6 @@
 # usesthis_crawler
 
-A scraper that crawls usesthis.com/interviews and stores the results in a local database. The database contains information about each interview, including the interview transcript, details about the person being interviewed, and the tools they use to do their jobs.
+Crawler that scrapes usesthis.com/interviews and stores the results in a local database. The database contains information about each interview, including the interview transcript, details about the person being interviewed, and the tools they use to do their jobs.
 
 To install:
 
