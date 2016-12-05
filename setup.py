@@ -9,7 +9,7 @@ setup(
     version='0.0.1',
     url='https://github.com/gbrener/usesthis_crawler.git',
     author='Greg Brener',
-    author_email='gbrener@gmail.com',
+    author_email='gregshipssoftware@gmail.com',
     description='Crawl usesthis.com and store results in SQL database.',
     license='MIT',
     packages=find_packages(),
